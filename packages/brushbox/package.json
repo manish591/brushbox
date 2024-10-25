@@ -1,0 +1,46 @@
+{
+  "name": "@brushbox/brushbox",
+  "version": "0.0.1",
+  "description": "A infinite whiteboard canvas",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "dev": "rollup -c -w --bundleConfigAsCjs",
+    "build": "rollup -c --bundleConfigAsCjs"
+  },
+  "keywords": [
+    "whiteboard",
+    "react",
+    "infinite canvas"
+  ],
+  "author": "@manish591",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-react": "^7.25.9",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^28.0.1",
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^12.1.1",
+    "@types/react": "^18.2.61",
+    "@types/react-dom": "^18.2.19",
+    "autoprefixer": "^10.4.18",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "rollup": "^4.24.0",
+    "rollup-plugin-dts": "^6.1.1",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2",
+    "tailwindcss": "^3.4.1",
+    "tslib": "^2.8.0",
+    "typescript": "^5.3.3"
+  },
+  "peerDependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}
