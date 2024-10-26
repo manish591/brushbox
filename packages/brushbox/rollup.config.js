@@ -1,13 +1,10 @@
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import typescript from '@rollup/plugin-typescript';
-import dts from 'rollup-plugin-dts';
 import terser from '@rollup/plugin-terser';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import babel from '@rollup/plugin-babel';
 import postcss from 'rollup-plugin-postcss';
-import autoprefixer from 'autoprefixer';
-import tailwindcss from 'tailwindcss';
 
 const packageJson = require('./package.json');
 
@@ -38,10 +35,13 @@ export default [
         presets: ['@babel/preset-react'],
       }),
       postcss({
-        plugins: [tailwindcss(), autoprefixer()],
-        extract: false,
-        modules: true,
-        inject: true,
+        // Extract CSS to separate file
+        extract: 'brushbox.css',
+        // Or inject into JS bundle
+        // inject: true,
+        minimize: true,
+        // Source maps for easier debugging
+        sourceMap: true,
       }),
     ],
     external: ['react', 'react-dom'],

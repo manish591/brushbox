@@ -1,5 +1,6 @@
 import './globals.css';
 import '@brushbox/ui/styles.css';
+import '@brushbox/brushbox/brushbox.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 

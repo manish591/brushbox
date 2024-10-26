@@ -1,11 +1,11 @@
-import { Card } from '@brushbox/ui/Card';
-import { Button } from '@brushbox/brushbox';
+import Brushbox from './components/whiteboard';
 
 export default function Page() {
   return (
     <main>
-      <Card />
-      <Button>Click</Button>
+      <div className="whiteboard-editor">
+        <Brushbox />
+      </div>
     </main>
   );
 }
