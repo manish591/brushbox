@@ -1,38 +1,46 @@
-import { MousePointer, Square, Circle } from 'lucide-react';
-import type { ElementType } from '../element';
+import { MousePointer, Square, Circle, Minus } from 'lucide-react';
+
+export type TSelectedTool = 'rectangle' | 'ellipse' | 'line' | 'selection';
+
+export const TOOLS = {
+  SELECTION: 'selection',
+  RECTANGLE: 'rectangle',
+  ELLIPSE: 'ellipse',
+  LINE: 'line',
+} as const;
+
+const TOOLBAR = [
+  { icon: MousePointer, name: TOOLS.SELECTION },
+  { icon: Square, name: TOOLS.RECTANGLE },
+  { icon: Circle, name: TOOLS.ELLIPSE },
+  { icon: Minus, name: TOOLS.LINE },
+];
 
 export function Toolbar({
-  setCurrentElementType,
+  setSelectedTool,
+  selectedTool,
 }: Readonly<{
-  setCurrentElementType: (value: React.SetStateAction<ElementType>) => void;
+  selectedTool: TSelectedTool;
+  setSelectedTool: (value: React.SetStateAction<TSelectedTool>) => void;
 }>) {
   return (
     <div className="brushbox-toolbar">
       <div className="brushbox-toolbar__item">
-        <button
-          className="p-3 hover:bg-gray-100 transition rounded-lg"
-          onClick={() => {
-            setCurrentElementType('selection');
-          }}
-        >
-          <MousePointer size={14} />
-        </button>
-        <button
-          className="p-3 hover:bg-gray-100 transition rounded-lg"
-          onClick={() => {
-            setCurrentElementType('rectangle');
-          }}
-        >
-          <Square size={14} />
-        </button>
-        <button
-          className="p-3 hover:bg-gray-100 transition rounded-lg'"
-          onClick={() => {
-            setCurrentElementType('ellipse');
-          }}
-        >
-          <Circle size={14} />
-        </button>
+        {TOOLBAR.map((tool) => {
+          return (
+            <button
+              key={tool.name}
+              style={{
+                background: `${selectedTool === tool.name ? '#a4a3a366' : ''}`,
+              }}
+              onClick={() => {
+                setSelectedTool(tool.name);
+              }}
+            >
+              <tool.icon width={18} height={18} />
+            </button>
+          );
+        })}
       </div>
     </div>
   );
