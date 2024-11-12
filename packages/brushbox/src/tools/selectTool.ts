@@ -1011,8 +1011,8 @@ export class SelectTool extends BaseTool {
     }
 
     const handleMouseUp = () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("pointermove", handleMouseMove);
+      window.removeEventListener("pointerup", handleMouseUp);
 
       this.scene.clearCanvas();
       this.scene.render();
@@ -1023,7 +1023,7 @@ export class SelectTool extends BaseTool {
       this.isResizingShapes = false;
     }
 
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener('pointermove', handleMouseMove);
+    window.addEventListener('pointerup', handleMouseUp);
   }
 }

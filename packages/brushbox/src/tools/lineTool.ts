@@ -35,8 +35,8 @@ export class LineTool extends BaseTool {
     const handleMouseUp = (event: MouseEvent) => {
       const { clientX, clientY } = event;
 
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("pointermove", handleMouseMove);
+      window.removeEventListener("pointerup", handleMouseUp);
 
       if (this.isDrawing && lastX != clientX && lastY != clientY) {
         const minX = Math.min(lastX, clientX);
@@ -58,7 +58,7 @@ export class LineTool extends BaseTool {
       this.isDrawing = false;
     }
 
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener('pointermove', handleMouseMove);
+    window.addEventListener('pointerup', handleMouseUp);
   }
 }

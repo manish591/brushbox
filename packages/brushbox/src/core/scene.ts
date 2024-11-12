@@ -6,11 +6,27 @@ export class Scene {
   private readonly canvas: HTMLCanvasElement;
   private shapes: BaseShape[];
   private activeTool: BaseTool;
+  private scale: number;
 
   constructor(canvas: HTMLCanvasElement) {
     this.shapes = [];
     this.canvas = canvas;
     this.activeTool = new SelectTool(this);
+    this.scale = 1;
+  }
+
+  initializeCanvas() {
+    this.canvas.width = window.innerWidth * this.scale;
+    this.canvas.height = window.innerHeight * this.scale;
+
+    const context = this.canvas.getContext("2d");
+    if (!context) return;
+
+    context.scale(this.scale, this.scale);
+  }
+
+  setScale(scale: number) {
+    this.scale = scale;
   }
 
   setActiveTool(newTool: BaseTool) {

@@ -18,16 +18,15 @@ export function Brushbox() {
     function () {
       if (canvasRef.current) {
         setIsCanvasLoading(false);
-        canvasRef.current.width = window.innerWidth;
-        canvasRef.current.height = window.innerHeight;
         scene.current = new Scene(canvasRef.current);
+        scene.current.setScale(window.devicePixelRatio);
+        scene.current.initializeCanvas();
       }
 
       function resize() {
-        if (canvasRef.current) {
-          canvasRef.current.width = window.innerWidth;
-          canvasRef.current.height = window.innerHeight;
-          scene.current?.render();
+        if (canvasRef.current && scene.current) {
+          scene.current.initializeCanvas();
+          scene.current.render();
         }
       }
 
@@ -67,10 +66,10 @@ export function Brushbox() {
       <div className="brushbox-wrapper">
         <canvas
           ref={canvasRef}
-          style={{ width: '100%', height: '100%' }}
-          onMouseDown={(e) => {
-            if (scene) {
-              scene.current?.handleMouseDown(e);
+          className="brushbox-canvas"
+          onPointerDown={(e) => {
+            if (scene.current) {
+              scene.current.handleMouseDown(e);
             }
           }}
         ></canvas>
