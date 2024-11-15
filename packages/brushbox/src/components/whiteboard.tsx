@@ -5,6 +5,8 @@ import { SelectTool } from '../tools/selectTool';
 import { EllipseTool } from '../tools/ellipseTool';
 import { RectangleTool } from '../tools/rectangleTool';
 import { LineTool } from '../tools/lineTool';
+import { FreehandTool } from '../tools/freedrawTool';
+import { TextTool } from '../tools/textTool';
 
 export function Brushbox() {
   const [isCanvasLoading, setIsCanvasLoading] = useState<boolean>(true);
@@ -51,6 +53,10 @@ export function Brushbox() {
         scene.current.setActiveTool(new RectangleTool(scene.current));
       } else if (selectedTool === TOOLS.LINE) {
         scene.current.setActiveTool(new LineTool(scene.current));
+      } else if (selectedTool === TOOLS.FREEDRAW) {
+        scene.current.setActiveTool(new FreehandTool(scene.current));
+      } else if (selectedTool === TOOLS.TEXT) {
+        scene.current.setActiveTool(new TextTool(scene.current));
       }
     },
     [selectedTool],
