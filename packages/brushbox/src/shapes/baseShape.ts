@@ -2,7 +2,7 @@ import { createStringId } from "../utils/crypto";
 import { SHAPE_HANDLERS } from "../constants/shape-handlers";
 import { TMovingOffsets } from "../tools/selectTool";
 
-export type TShapes = "rectangle" | "ellipse" | "line";
+export type TShapes = "rectangle" | "ellipse" | "line" | "freedraw" | "text";
 
 export type TBaseShape = {
   id: string,

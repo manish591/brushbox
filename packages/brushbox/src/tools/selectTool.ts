@@ -8,7 +8,7 @@ import {
 import { Scene } from "../core/scene";
 import { TShapeBounds, TShapeHandler } from "../shapes/baseShape";
 import { Ellipse } from "../shapes/ellipse";
-import { Freedraw, FreeHandPoint } from "../shapes/freedraw";
+import { Freedraw, FreeDrawPoints } from "../shapes/freedraw";
 import { Line } from "../shapes/line";
 import { Rectangle } from "../shapes/rectangle";
 import { rotate } from "../utils/math";
@@ -21,7 +21,7 @@ export type TMovingOffsets = {
   lineStartOffsetY?: number,
   lineEndOffsetX?: number,
   lineEndOffsetY?: number,
-  pointsOffsets?: FreeHandPoint[]
+  pointsOffsets?: FreeDrawPoints[]
 }
 
 export class SelectTool extends BaseTool {
@@ -479,7 +479,7 @@ export class SelectTool extends BaseTool {
             lineEndOffsetY: lastY - shape.endY,
           });
         } else if (shape instanceof Freedraw) {
-          const pointsOffsets: FreeHandPoint[] = [];
+          const pointsOffsets: FreeDrawPoints[] = [];
 
           shape.points.forEach(([a, b]) => {
             const offsetX = lastX - a;
@@ -983,18 +983,18 @@ export class SelectTool extends BaseTool {
             });
           } else if (shape instanceof Freedraw) {
             const offsets = this.movingOffsets.get(shape.id)!;
-            const freehandPoints: FreeHandPoint[] = [];
+            const freeDrawPoints: FreeDrawPoints[] = [];
 
             for (let offset of offsets.pointsOffsets!) {
               const x = clientX - offset[0];
               const y = clientY - offset[1];
-              freehandPoints.push([x, y]);
+              freeDrawPoints.push([x, y]);
             }
 
             shape.translate({
               offsetX: clientX - offsets.offsetX,
               offsetY: clientY - offsets.offsetY,
-              pointsOffsets: freehandPoints
+              pointsOffsets: freeDrawPoints
             });
           } else {
             const offsets = this.movingOffsets.get(shape.id)!;
@@ -1014,18 +1014,18 @@ export class SelectTool extends BaseTool {
                 lineEndOffsetY: clientY - offsets.lineEndOffsetY!
               });
             } else if (shape instanceof Freedraw) {
-              const freehandPoints: FreeHandPoint[] = [];
+              const freeDrawPoints: FreeDrawPoints[] = [];
 
               for (let offset of offsets.pointsOffsets!) {
                 const x = clientX - offset[0];
                 const y = clientY - offset[1];
-                freehandPoints.push([x, y]);
+                freeDrawPoints.push([x, y]);
               }
 
               shape.translate({
                 offsetX: clientX - offsets.offsetX,
                 offsetY: clientY - offsets.offsetY,
-                pointsOffsets: freehandPoints
+                pointsOffsets: freeDrawPoints
               });
             } else {
               shape.translate({ offsetX: clientX - offsets.offsetX, offsetY: clientY - offsets.offsetY });

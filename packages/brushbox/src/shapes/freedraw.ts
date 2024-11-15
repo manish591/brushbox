@@ -3,16 +3,16 @@ import { TMovingOffsets } from "../tools/selectTool";
 import { distanceBetweenTwoPoints, rotate } from "../utils/math";
 import { BaseShape, TBaseShape, TShapeBounds, TShapeHandler, TShapes } from "./baseShape";
 
-export type FreeHandPoint = [number, number];
+export type FreeDrawPoints = [number, number];
 
-export type TLine = Partial<TBaseShape> & {
+export type TFreeDraw = Partial<TBaseShape> & {
   type?: TShapes,
   angle?: number,
   x?: number,
   y?: number,
   width?: number,
   height?: number,
-  points: FreeHandPoint[];
+  points: FreeDrawPoints[];
 }
 
 export class Freedraw extends BaseShape {
@@ -22,11 +22,11 @@ export class Freedraw extends BaseShape {
   y: number;
   width: number;
   height: number;
-  points: FreeHandPoint[];
+  points: FreeDrawPoints[];
 
-  constructor(options: TLine) {
+  constructor(options: TFreeDraw) {
     super(options);
-    this.type = options.type ?? "rectangle";
+    this.type = options.type ?? "freedraw";
     this.angle = options.angle ?? 0;
     this.x = options.x ?? 0;
     this.y = options.y ?? 0;
@@ -126,46 +126,6 @@ export class Freedraw extends BaseShape {
     const bounds = this.getBounds();
 
     return [
-      // {
-      //   type: SHAPE_HANDLERS.BOTTOM,
-      //   x: (bounds.startX + bounds.endX) / 2 - (HANDLER_SIZE / 2),
-      //   y: bounds.endY,
-      // },
-      // {
-      //   type: SHAPE_HANDLERS.TOP,
-      //   x: (bounds.startX + bounds.endX) / 2 - (HANDLER_SIZE / 2),
-      //   y: bounds.startY - HANDLER_SIZE,
-      // },
-      // {
-      //   type: SHAPE_HANDLERS.RIGHT,
-      //   x: bounds.endX,
-      //   y: (bounds.startY + bounds.endY) / 2 - (HANDLER_SIZE / 2),
-      // },
-      // {
-      //   type: SHAPE_HANDLERS.LEFT,
-      //   x: bounds.startX - HANDLER_SIZE,
-      //   y: (bounds.startY + bounds.endY) / 2 - (HANDLER_SIZE / 2),
-      // },
-      // {
-      //   type: SHAPE_HANDLERS.TOP_LEFT,
-      //   x: bounds.startX - HANDLER_SIZE,
-      //   y: bounds.startY - HANDLER_SIZE,
-      // },
-      // {
-      //   type: SHAPE_HANDLERS.TOP_RIGHT,
-      //   x: bounds.endX,
-      //   y: bounds.startY - HANDLER_SIZE,
-      // },
-      // {
-      //   type: SHAPE_HANDLERS.BOTTOM_LEFT,
-      //   x: bounds.startX - HANDLER_SIZE,
-      //   y: bounds.endY,
-      // },
-      // {
-      //   type: SHAPE_HANDLERS.BOTTOM_RIGHT,
-      //   x: bounds.endX,
-      //   y: bounds.endY,
-      // },
       {
         type: SHAPE_HANDLERS.ROTATION,
         x: ((bounds.startX + bounds.endX) / 2),
