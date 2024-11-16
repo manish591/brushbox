@@ -1,8 +1,14 @@
-import { HANDLER_SIZE, ROTATION_HANDLER_OFFSET, SHAPE_HANDLERS } from "../constants/shape-handlers";
-import { SELECTION_BORDER_COLOR, SELECTION_BORDER_FILL_COLOR, SELECTION_RECTANGLE_BACKGROUND, SELECTION_RECTANGLE_COLOR } from "../constants/shapes";
+import { HANDLER_SIZE, SHAPE_HANDLERS } from "../constants/shape-handlers";
+import {
+  SELECTION_BORDER_COLOR,
+  SELECTION_BORDER_FILL_COLOR,
+  SELECTION_RECTANGLE_BACKGROUND,
+  SELECTION_RECTANGLE_COLOR
+} from "../constants/shapes";
 import { Scene } from "../core/scene";
 import { TShapeBounds, TShapeHandler } from "../shapes/baseShape";
 import { Ellipse } from "../shapes/ellipse";
+import { Freedraw, FreeDrawPoints } from "../shapes/freedraw";
 import { Line } from "../shapes/line";
 import { Rectangle } from "../shapes/rectangle";
 import { rotate } from "../utils/math";
@@ -15,6 +21,7 @@ export type TMovingOffsets = {
   lineStartOffsetY?: number,
   lineEndOffsetX?: number,
   lineEndOffsetY?: number,
+  pointsOffsets?: FreeDrawPoints[]
 }
 
 export class SelectTool extends BaseTool {
@@ -239,18 +246,20 @@ export class SelectTool extends BaseTool {
         const ROTATION_HANDLER = [0, (-height / 2) - 25];
 
         // draw handler
-        RESIZE_HANDLER.forEach(([a, b]) => {
-          context.save();
-          context.beginPath();
-          context.translate(cx, cy);
-          context.rotate(rotationAngle);
-          context.strokeStyle = SELECTION_BORDER_COLOR;
-          context.fillStyle = SELECTION_BORDER_FILL_COLOR;
-          context.rect(a, b, HANDLER_SIZE, HANDLER_SIZE);
-          context.stroke();
-          context.fill();
-          context.restore();
-        });
+        if (!(selectedShapes[0] instanceof Freedraw)) {
+          RESIZE_HANDLER.forEach(([a, b]) => {
+            context.save();
+            context.beginPath();
+            context.translate(cx, cy);
+            context.rotate(rotationAngle);
+            context.strokeStyle = SELECTION_BORDER_COLOR;
+            context.fillStyle = SELECTION_BORDER_FILL_COLOR;
+            context.rect(a, b, HANDLER_SIZE, HANDLER_SIZE);
+            context.stroke();
+            context.fill();
+            context.restore();
+          });
+        }
 
         // draw other handlers
         selectionHandlers.forEach(handler => {
@@ -376,6 +385,8 @@ export class SelectTool extends BaseTool {
 
   isCoordinateWithinSelectionBounds(x: number, y: number) {
     const { startX, startY, endX, endY } = this.getSelectionBounds()!;
+    // fix this bug, selecting shape if selectedShapes elements number is greater than 1
+    // const [rotatedX, rotatedY] = rotate(x, y, (startX + endX) / 2, (startY + endY) / 2, )
     return x >= startX && x <= endX && y >= startY && y <= endY;
   }
 
@@ -466,6 +477,20 @@ export class SelectTool extends BaseTool {
             lineStartOffsetY: lastY - shape.startY,
             lineEndOffsetX: lastX - shape.endX,
             lineEndOffsetY: lastY - shape.endY,
+          });
+        } else if (shape instanceof Freedraw) {
+          const pointsOffsets: FreeDrawPoints[] = [];
+
+          shape.points.forEach(([a, b]) => {
+            const offsetX = lastX - a;
+            const offsetY = lastY - b;
+            pointsOffsets.push([offsetX, offsetY]);
+          });
+
+          this.movingOffsets.set(shape.id, {
+            offsetX: lastX - shape.x,
+            offsetY: lastY - shape.y,
+            pointsOffsets
           });
         } else if (shape instanceof Rectangle || shape instanceof Ellipse) {
           this.movingOffsets.set(shape.id, {
@@ -892,7 +917,8 @@ export class SelectTool extends BaseTool {
           selectedShapes.forEach(shape => {
             if (
               shape instanceof Rectangle ||
-              shape instanceof Ellipse
+              shape instanceof Ellipse ||
+              shape instanceof Freedraw
             ) {
               shape.rotate(angle);
             }
@@ -955,6 +981,21 @@ export class SelectTool extends BaseTool {
               lineEndOffsetX: clientX - offsets.lineEndOffsetX!,
               lineEndOffsetY: clientY - offsets.lineEndOffsetY!
             });
+          } else if (shape instanceof Freedraw) {
+            const offsets = this.movingOffsets.get(shape.id)!;
+            const freeDrawPoints: FreeDrawPoints[] = [];
+
+            for (let offset of offsets.pointsOffsets!) {
+              const x = clientX - offset[0];
+              const y = clientY - offset[1];
+              freeDrawPoints.push([x, y]);
+            }
+
+            shape.translate({
+              offsetX: clientX - offsets.offsetX,
+              offsetY: clientY - offsets.offsetY,
+              pointsOffsets: freeDrawPoints
+            });
           } else {
             const offsets = this.movingOffsets.get(shape.id)!;
             shape.translate({ offsetX: clientX - offsets.offsetX, offsetY: clientY - offsets.offsetY });
@@ -971,6 +1012,20 @@ export class SelectTool extends BaseTool {
                 lineStartOffsetY: clientY - offsets.lineStartOffsetY!,
                 lineEndOffsetX: clientX - offsets.lineEndOffsetX!,
                 lineEndOffsetY: clientY - offsets.lineEndOffsetY!
+              });
+            } else if (shape instanceof Freedraw) {
+              const freeDrawPoints: FreeDrawPoints[] = [];
+
+              for (let offset of offsets.pointsOffsets!) {
+                const x = clientX - offset[0];
+                const y = clientY - offset[1];
+                freeDrawPoints.push([x, y]);
+              }
+
+              shape.translate({
+                offsetX: clientX - offsets.offsetX,
+                offsetY: clientY - offsets.offsetY,
+                pointsOffsets: freeDrawPoints
               });
             } else {
               shape.translate({ offsetX: clientX - offsets.offsetX, offsetY: clientY - offsets.offsetY });

@@ -1,12 +1,27 @@
-import { MousePointer, Square, Circle, Minus } from 'lucide-react';
+import {
+  MousePointer,
+  Square,
+  Circle,
+  Minus,
+  Pencil,
+  ALargeSmall,
+} from 'lucide-react';
 
-export type TSelectedTool = 'rectangle' | 'ellipse' | 'line' | 'selection';
+export type TSelectedTool =
+  | 'rectangle'
+  | 'ellipse'
+  | 'line'
+  | 'selection'
+  | 'freedraw'
+  | 'text';
 
 export const TOOLS = {
   SELECTION: 'selection',
   RECTANGLE: 'rectangle',
   ELLIPSE: 'ellipse',
   LINE: 'line',
+  FREEDRAW: 'freedraw',
+  TEXT: 'text',
 } as const;
 
 const TOOLBAR = [
@@ -14,6 +29,8 @@ const TOOLBAR = [
   { icon: Square, name: TOOLS.RECTANGLE },
   { icon: Circle, name: TOOLS.ELLIPSE },
   { icon: Minus, name: TOOLS.LINE },
+  { icon: Pencil, name: TOOLS.FREEDRAW },
+  { icon: ALargeSmall, name: TOOLS.TEXT },
 ];
 
 export function Toolbar({
