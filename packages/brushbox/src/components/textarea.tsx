@@ -72,7 +72,6 @@ export function Textarea({
         whiteSpace: 'pre',
         fontFamily: textareaState.fontFamily,
         fontSize: textareaState.fontSize,
-        border: '1px solid black',
         paddingLeft: '5px',
         paddingRight: '5px',
       }}
