@@ -1,10 +1,10 @@
 import { Scene } from "../core/scene";
-import { Freedraw, FreeHandPoint } from "../shapes/freedraw";
+import { Freedraw, FreeDrawPoints } from "../shapes/freedraw";
 import { BaseTool } from "./baseTool";
 
 export class FreehandTool extends BaseTool {
   private isDrawing: boolean;
-  private points: FreeHandPoint[];
+  private points: FreeDrawPoints[];
 
   constructor(scene: Scene) {
     super(scene);
