@@ -11,6 +11,7 @@ import { Ellipse } from "../shapes/ellipse";
 import { Freedraw, FreeDrawPoints } from "../shapes/freedraw";
 import { Line } from "../shapes/line";
 import { Rectangle } from "../shapes/rectangle";
+import { Text } from "../shapes/text";
 import { rotate } from "../utils/math";
 import { BaseTool } from "./baseTool";
 
@@ -246,7 +247,9 @@ export class SelectTool extends BaseTool {
         const ROTATION_HANDLER = [0, (-height / 2) - 25];
 
         // draw handler
-        if (!(selectedShapes[0] instanceof Freedraw)) {
+        if (
+          !(selectedShapes[0] instanceof Freedraw) &&
+          !(selectedShapes[0] instanceof Text)) {
           RESIZE_HANDLER.forEach(([a, b]) => {
             context.save();
             context.beginPath();
@@ -492,7 +495,11 @@ export class SelectTool extends BaseTool {
             offsetY: lastY - shape.y,
             pointsOffsets
           });
-        } else if (shape instanceof Rectangle || shape instanceof Ellipse) {
+        } else if (
+          shape instanceof Rectangle ||
+          shape instanceof Ellipse ||
+          shape instanceof Text
+        ) {
           this.movingOffsets.set(shape.id, {
             offsetX: lastX - shape.x,
             offsetY: lastY - shape.y
@@ -918,7 +925,8 @@ export class SelectTool extends BaseTool {
             if (
               shape instanceof Rectangle ||
               shape instanceof Ellipse ||
-              shape instanceof Freedraw
+              shape instanceof Freedraw ||
+              shape instanceof Text
             ) {
               shape.rotate(angle);
             }

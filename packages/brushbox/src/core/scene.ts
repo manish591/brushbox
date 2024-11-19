@@ -1,18 +1,34 @@
 import { BaseShape } from "../shapes/baseShape";
 import { SelectTool } from "../tools/selectTool";
 import { BaseTool } from "../tools/baseTool";
+import { TSelectedTool } from "../components/toolbar";
+import { TTextAreaState } from "../components/whiteboard";
+
+type TSceneState = {
+  canvas: HTMLCanvasElement;
+  selectedTool: TSelectedTool;
+  updateSelectedTool: (val: TSelectedTool) => void;
+  setTextareaVisibility: (val: boolean) => void;
+  updateTextareaState: (state: Partial<TTextAreaState>) => void;
+}
 
 export class Scene {
   private readonly canvas: HTMLCanvasElement;
   private shapes: BaseShape[];
   private activeTool: BaseTool;
   private scale: number;
+  setTextareaVisibility: (val: boolean) => void;
+  updateSelectedTool: (val: TSelectedTool) => void;
+  updateTextareaState: (state: Partial<TTextAreaState>) => void;
 
-  constructor(canvas: HTMLCanvasElement) {
+  constructor(sceneState: TSceneState) {
     this.shapes = [];
-    this.canvas = canvas;
+    this.canvas = sceneState.canvas;
     this.activeTool = new SelectTool(this);
     this.scale = 1;
+    this.setTextareaVisibility = sceneState.setTextareaVisibility;
+    this.updateSelectedTool = sceneState.updateSelectedTool;
+    this.updateTextareaState = sceneState.updateTextareaState;
   }
 
   initializeCanvas() {
@@ -107,5 +123,9 @@ export class Scene {
 
   getHitShapes(x: number, y: number) {
     return this.shapes.find(shape => shape.contain(x, y));
+  }
+
+  showTextField(fn: React.Dispatch<React.SetStateAction<boolean>>) {
+    fn(true);
   }
 }
